@@ -1,0 +1,58 @@
+
+The aim of this file is to present all entities comprising the HyperVision project, i.e. files,
+directories, modules, functions, macros definitions and data types. The summary may act as a part
+of project's documentation, a measure of expended effort, or a guide for further development.
+
+
+0./ Directory structure
+	./doc				project-related textual documents
+		ABOUT				general project description
+		SUMMARY				detailed guide to project's structure and API
+		REQUIREMENTS		comprehensive specification of project's dependencies
+		BIBLIOGRAPHY		list of sources reinforcing my knowledge base for the project
+		FUNCTICON			lexicon of functions used in the project (my original idea)
+		makefile.txt		a summary of the official GNU Make documentation
+		opengl.txt			a summary of OpenGL Programming Guide book and online resources
+		glsl.txt			a summary of OpenGL Shading Language book and online resources
+	./inc				public header files (a few of them are generated with hvCPP)
+		common.h			project configuration and common definitions
+	./obj				binary object files (created during build process)
+	./src				source files and hard-coded resources
+		./assembly			x86-64 assembly code for highly optimised functions (GAS)
+		./models			hand-crafted models specified in Wavefront .obj format
+		./shaders			vertex and fragment shaders' sources programmed in GLSL
+		./tests				unit tests for the modules and idea tests for the project (glib)
+	Makefile			project's building rules and macros dedicated to GNU make
+	hvCPP.pl			HyperVision C pre-processor -- my proprietary solution for functional
+						pre-processing, merging resources and code generation, written in Perl
+		
+1./ Modules
+	[output]			formatted console output and error handling
+	[matrix]			vector/matrix arithmetic, affine and projective transformations
+	[opengl]			OpenGL library loading and initialisation, front-end framework
+	[shader]			shader manager with introspection and error reporting, shaders' library
+	[pmodel]			procedural model builder and manager, hard-coded models' library
+
+
+2./ Data types
+	vec3_t		a three-dimensional vector ({float[3]} or %XMM register)
+	vec4_t		a four-dimensional vector ({float[4]} or %XMM register)
+	vtx4_t		a single 4D vertex (X,Y,Z,W components, {float[4]})
+	mat4_t		a 4x4 matrix ({float[16]}, optionally 16-alligned for SSE)
+
+	mesh_t		a mesh buffer (for stock models and CPU-side processing)
+	model_t		a model object (with GPU-side storage and rendering capabilities) (alt: body_t, unit_t, part_t)
+	prog_t		a shader program object (compiles, links and stores vertex/fragment shaders)
+
+3./ Functions:
+	hvCreate[[Stock|Final|]Model|Program]
+	hvDelete[Model|Program]
+	hvVector[Equal|Length|Dot]   scalar-valued vector operations
+	hvVector[Neg|Sub|Norm|Cross] vector-valued vector operations
+	hvMatrix*				general-purpose matrix arithmetic and transformations
+	hvMatrixView*			operations specific to view matrices
+	hvMatrixProjection*		operations specific to projection matrices
+	hvLog*                  logging, error checking, output formatting
+	hvApp*                  application framework
+	
+

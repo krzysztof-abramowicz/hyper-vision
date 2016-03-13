@@ -1,0 +1,61 @@
+
+
+   ██╗  ██╗██╗   ██╗██████╗ ███████╗██████╗ ██╗   ██╗██╗███████╗██╗ ██████╗ ███╗   ██╗
+   ██║  ██║╚██╗ ██╔╝██╔══██╗██╔════╝██╔══██╗██║   ██║██║██╔════╝██║██╔═══██╗████╗  ██║
+   ███████║ ╚████╔╝ ██████╔╝█████╗  ██████╔╝██║   ██║██║███████╗██║██║   ██║██╔██╗ ██║
+   ██╔══██║  ╚██╔╝  ██╔═══╝ ██╔══╝  ██╔══██╗╚██╗ ██╔╝██║╚════██║██║██║   ██║██║╚██╗██║
+   ██║  ██║   ██║   ██║     ███████╗██║  ██║ ╚████╔╝ ██║███████║██║╚██████╔╝██║ ╚████║
+   ╚═╝  ╚═╝   ╚═╝   ╚═╝     ╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+                                                                 [Open Source Edition]
+
+
+ HyperVision is a rendering engine designed for procedural modelling of architectural forms.
+ The idea for this project came with my dream of creating virtual cityscapes for the sake of
+ widely-understood coordination of urban life and public administration. HyperVision-based
+ Web Services would be a digital reflection of most municipal processes leading to a fair
+ transparent, democratic, Information Society.
+
+ HyperVision is an attempt to create a base for a Service for Everything -- a HyperService.
+ Such tool would integrate all city services and highly optimise their use through advanced
+ scheduling known from the HTC world. It would also introduce a perfect load balancing, so
+ the share of work. The HyperService could be the world-first solution for unemployment and
+ equitable distribution of resources.
+
+ HyperVision project tries to achieve its ambitious goals from the very beginning. It is an
+ inter-disciplinary project based on knowledge of different fields and using tools of various
+ kinds. The implementation relies on linear algebra, stereometry and formal grammars (Maths),
+ imperative programming, scripting and parsing (Computer Science), building design, proportion
+ and stylistic periods (Architecture). It also uses many programming languages, libraries and
+ compiling tools to create the final executable:
+
+   • C'99 programming language,
+   • Perl scripting language,
+   • GLSL shading language,
+   • OpenGL 4.0 graphical library,
+   • GTK+ user-interface library,
+   • GLib Testig framework,
+   • GNU Make building tool,
+   • Wavefront OBJ format,
+   • x86_64 assembly (SSE intrinsics).
+
+ The project tries to be inventive and use the state-of-the-art technology for implementation.
+ Unfortunately, this brings a handful of problems including scarce knowledge resources and the
+ lack of appropriate tools and functionalities in existing code base ...or at least not such
+ that would meet my vision of HyperVision :-) This fact results in several important milestones,
+ whose attainment significantly comlicates my work:
+
+   0. Implementation of my own SSE-enabled linear algebra library,
+   1. Writing Makefile for separate compilation of interdependent modules,
+   2. Using my own C preprocessor for code generation and embedding resources,
+   3. Creating OpenGL widget for GTK+ (EGL-based OpenGL 4.0 context),
+   4. Rendering 3D graphics with the new OpenGL 4.0 syntax,
+   5. Inventing an XML-based procedural model description language.
+
+ I also place a strong emphasis on documentation. You will find a lot of technical information
+ in the ./doc subtree of the project's directory. I highly recommend to start from reading the
+ SUMMARY file which is the documentation's index and a guide through the project.
+
+ Wishing you a hyper-experience with the project,
+
+ Krzysztof Abramowicz
+

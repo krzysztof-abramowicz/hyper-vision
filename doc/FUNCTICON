@@ -1,0 +1,98 @@
+
+The Functicon is a lexicon of all types, macros, functions and libraries used in the HyperVision
+project -- a vocabulary of the source code. It is a hypothetical output from a non-existing
+'abstract' utility from the GCC toolchain. In the future, such files could be used by university
+lecturers to assess the functional richness of an academic project.
+
+The C Standard Library
+	<assert.h>
+		Macros:
+			NDEBUG
+			VOID assert(EXPR);
+	<stdarg.h>
+		Types: va_list
+		Macros:
+			VOID va_start(va_list ap, last)
+			TYPE va_arg(va_list ap, type)
+			VOID va_end(va_list ap)
+	<stdbool.h> (C99)
+		Macros: bool, true, false
+	<stdio.h>
+		Types: FILE
+		Functions:
+			int fputs(const char *str, FILE *stream);
+			int printf(const char *format, ...);
+			int snprintf(char *str, size_t size, const char *format, ...); (C99)
+	<stdlib.h>
+		Types: size_t
+		Macros: NULL, EXIT_SUCCESS, EXIT_FAILURE
+		Functions:
+			void *malloc(size_t size);
+			void free(void *ptr);
+			void exit(int status);
+	<string.h>
+		Functions:
+			void *memcpy(void *dst, const void *src, size_t n);
+			size_t strlen(const char *s);
+	<tgmath.h> (C99)
+		Macros:
+			TYPE sqrt(TYPE)
+			TYPE acos(TYPE)
+
+The GNU C Library
+	<gtype.h>
+		Types: GType, GTypeInfo
+		Functions:
+			GType g_type_register_fundamental(GType type_id, const gchar *type_name, const GTypeInfo *info, const GTypeFundamentalInfo *finfo, GTypeFlags flags);
+			g_type_create_instance(TODO)
+	<glib-object.h>
+		Functions:
+			g_object_new
+			g_object_ref
+			g_object_unref
+
+The OpenGL Extension Wrangler (GLEW) Library <GL/glew.h>
+	Macros:
+		GLEW_OK
+		VOID glewInit()
+		
+
+The OpenGL Utility Toolkit (GLUT) Library <GL/freeglut.h>
+	Macros:
+		GLUT_RGBA, GLUT_DOUBLE, GLUT_DEPTH, GLUT_MULTISAMPLE (displayMode),
+		GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS (option_flag, EXT)
+	Functions:
+		void glutInit(int* pargc, char** argv);
+		void glutInitContextVersion(int majorVersion, int minorVersion); (EXT)
+		void glutInitContextFlags(int flags); (EXT)
+		void glutInitContextProfile(int profile); (EXT)
+		void glutInitWindowPosition(int x, int y);
+		void glutInitWindowSize(int width, int height);
+		void glutInitDisplayMode(unsigned int displayMode);
+		void glutSetOption(GLenum option_flag, int value); (EXT)
+		int glutCreateWindow(const char* title);
+
+		void glutTimerFunc(unsigned int time, void (* callback)(int), int value);
+		void glutKeyboardUpFunc( void (* callback)( unsigned char, int, int ) );
+		void glutSpecialUpFunc( void (* callback)( int, int, int ) );
+		void glutIdleFunc(void (* callback)(void));
+		void glutReshapeFunc(void (* callback)(int, int));
+		void glutDisplayFunc(void (* callback)(void));
+		void glutCloseFunc(void (* callback)(void)); (EXT)
+
+		void lutMainLoop(void);
+
+
+The OpenGL Library
+	Macros:
+		GL_POINT, GL_LINE, GL_FILL (rasterisation modes);
+		GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_LINE_LOOP, GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN (primitive modes);
+		GL_VERTEX_SHADER, GL_FRAGMENT_SHADER (shader types).
+	Functions:
+		glPolygonMode(GL_FRONT_AND_BACK, ras_mode);
+		GLuint glCreateProgram(void);
+		GLuint glCreateShader(GLenum shaderType);
+		void glShaderSource(GLuint shader,  GLsizei count,  const GLchar **string,  const GLint *length);
+
+
+

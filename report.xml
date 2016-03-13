@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<gtester>
+  <testbinary path="matrix-test">
+    <binary file="matrix-test"/>
+    <random-seed>R02Scbb9e4094ffbe48e79b8a778d96fcc48</random-seed>
+    <testcase path="/hv/vector/compare">
+      <duration>0.000037</duration>
+      <status exit-status="0" n-forks="0" result="success"/>
+    </testcase>
+    <testcase path="/hv/vector/neg-add-sum">
+      <duration>0.000034</duration>
+      <status exit-status="0" n-forks="0" result="success"/>
+    </testcase>
+    <testcase path="/hv/vector/dot-product">
+      <duration>0.000028</duration>
+      <status exit-status="0" n-forks="0" result="success"/>
+    </testcase>
+    <testcase path="/hv/vector/cross-product">
+      <duration>0.000031</duration>
+      <status exit-status="0" n-forks="0" result="success"/>
+    </testcase>
+    <testcase path="/hv/matrix/compare">
+      <duration>0.000030</duration>
+      <status exit-status="0" n-forks="0" result="success"/>
+    </testcase>
+    <testcase path="/hv/matrix/transpose">
+      <duration>0.000027</duration>
+      <status exit-status="0" n-forks="0" result="success"/>
+    </testcase>
+    <testcase path="/hv/matrix/multiply">
+      <duration>0.000037</duration>
+      <status exit-status="0" n-forks="0" result="success"/>
+    </testcase>
+    <testcase path="/hv/matrix/warm-up">
+      <duration>6.063080</duration>
+      <status exit-status="0" n-forks="0" result="success"/>
+    </testcase>
+    <testcase path="/hv/matrix/multiply-perf">
+      <performance minimize="1" maximize="0" value="0.16">
+        classic: 0.1600 sec
+      </performance>
+      <performance minimize="1" maximize="0" value="0.12">
+        sse-asm: 0.1200 sec (75%)
+      </performance>
+      <performance minimize="1" maximize="0" value="0.1">
+        sse-int: 0.1000 sec (62%)
+      </performance>
+      <duration>1.250306</duration>
+      <status exit-status="0" n-forks="0" result="success"/>
+    </testcase>
+    <testcase path="/hv/matrix/rotate-perf">
+      <performance minimize="1" maximize="0" value="0.14">
+        std-clib: 0.1400 sec
+      </performance>
+      <performance minimize="1" maximize="0" value="0.11">
+        std-ltab: 0.1100 sec (78%)
+      </performance>
+      <performance minimize="1" maximize="0" value="0.09">
+        sse-clib: 0.0900 sec (64%)
+      </performance>
+      <performance minimize="1" maximize="0" value="0.06">
+        sse-ltab: 0.0600 sec (42%)
+      </performance>
+      <performance minimize="1" maximize="0" value="0.05">
+        sse-expv: 0.0500 sec (35%)
+      </performance>
+      <duration>1.409649</duration>
+      <status exit-status="0" n-forks="0" result="success"/>
+    </testcase>
+    <testcase path="/hv/matrix/view-perf">
+      <performance minimize="1" maximize="0" value="0.21">
+        scalar: 0.2100 sec
+      </performance>
+      <performance minimize="1" maximize="0" value="0.14">
+        vector: 0.1400 sec (66%)
+      </performance>
+      <duration>1.102613</duration>
+      <status exit-status="0" n-forks="0" result="success"/>
+    </testcase>
+    <duration>9.831407</duration>
+  </testbinary>
+</gtester>

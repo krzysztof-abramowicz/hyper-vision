@@ -1,0 +1,49 @@
+
+It is not uncommon to overstate software requirements nowadays. This may be due to various
+shortcomings or intended purposes. Sometimes both reasons alternate forming a multi-layered
+structure of false assumptions leading to serious overetimations. This file was created for
+a reliable determination of requirements for the HyperVision project.
+
+REQUIREMENTS
+
+Programming language:
+	Version: C'99 : ISO/IEC 9899:1999
+	New features utilised:
+		boolean type [common]
+		variadic macros [output]
+		type-generic math [matrix]
+		inline functions [matrix]
+		compound literals [matrix]
+		restrict pointers [matrix]
+	Comments:
+		Most C'99 features enrich the matrix module which emphasizess the scientific nature
+		of the project. The implementation reflects my experiences with "concurrent programming"
+		course by Dr Clemens Grelck (C'99, vectorisation, restrict pointers).
+
+
+Project building tool:
+	Version: GNU Make 3.82
+	New features utilised:
+		'define' directive
+		- 3.81 -
+		'.DEFAULT_GOAL' special variable
+		'lastword' function
+		'info' function
+		'and' function
+		- 3.80 -
+		'value' function
+		'eval' function
+	Comments:
+		Most of the cutting-edge features are used to implement my proprietary solution for
+		interdependent modules' compilation -- the 'discover' function. The modern syntax also
+		allowed me to implement embedded unit test cases as 'self-test' pseudo target.
+	Resources:
+		My StackOverflow question (and answer) on separate compilation ('discover' function).
+		[http://stackoverflow.com/questions/18993445/how-to-use-separate-compilation-for-interdependent-modules]
+
+Scripting Language
+	Version: Perl 5.6
+	TO DO
+
+OpenGL library:
+

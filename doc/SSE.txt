@@ -1,0 +1,31 @@
+
+SSE summary
+
+Table 1: SSE intrinsics utilised in the HyperVision project
+
+  Assembly (Intel)      │      Intrinsic (<xmmintrin.h>)           │ Short description
+                        │                                          │
+ ADDPS xmm1, xmm2/m128  │ __m128 _mm_add_ps(__m128 a, __m128 b)    │ Add PS values from xmm2/m128 to xmm1
+ ADDSS xmm1, xmm2/m32   │ __m128 _mm_add_ss(__m128 a, __m128 b)    │ Add the low SS value from xmm2/m32 to xmm1
+ CMPPS xmm1, xmm2, im8  │ __m128 _mm_cmpeq_ps(__m128 a, __m128 b)  │ Compare (im8=0 => equal) PS from xmm2/mem with PS values in xmm1
+ DIVPS xmm1, xmm2/m128  │ __m128 _mm_div_ps(__m128 a, __m128 b)    │ Divide PS values in xmm1 by PS values in xmm2/m128
+ MOVMSKPS r32, xmm      │    int _mm_movemask_ps(__m128 a)         │ Extract 4-bit sign mask of from xmm and store in r32
+ MOVSS xmm , m32        │ __m128 _mm_load_ss(float * p)            │ Move SS value from m32 to xmm register (reset other xmm bits)
+       m32, xmm         │   void _mm_store_ss(float * p, __m128 a) │ Move SS value from xmm register to m32
+       xmm2, xmm1       │ __m128 _mm_move_ss(__m128 a, __m128 b)   │ Move SS value from xmm2 to xmm1 register (preserve other bits)
+ MOVAPS xmm, m128       │ __m128 _mm_load_ps (float * p)           │ Move PS numbers from aligned m128 to xmm
+        m128, xmm1      │   void _mm_store_ps (float *p, __m128 a) │ Move PS numbers from xmm to aligned m128
+ MULPS xmm1, xmm2/m128  │ __m128 _mm_mul_ps(__m128 a, __m128 b)    │ Multiply PS values in xmm2/mem by xmm1
+ SUBPS xmm1, xmm2/m128  │ __m128 _mm_sub_ps(__m128 a, __m128 b)    │ Subtract PS values in xmm2/m128 from xmm1
+ SHUFPS x1,x2/m128,im8  │ __m128 _mm_shuffle_ps(__m128,__m128,im8) │ Shuffle PS values selected by im8 from xmm1 and xmm1/m128 to xmm1
+ XORPS xmm1, xmm2/m128  │ __m128 _mm_xor_ps(__m128 a, __m128 b)    │ Calculate bitwise eXclusive-OR of xmm2/m128 and xmm1
+
+  none                  │  float _mm_cvtss_f32(__m128 a)           │ Cast (low 32 bits of) __m128 to float
+  multiple              │ __m128 _mm_set1_epi32(int)               │ Sets all PS values to given 32-bit integer
+  multiple              │ __m128 _mm_set1_ps(float)                │ Sets all PS values to given 32-bit float
+
+
+PS - Packed Single-precision floating-point [values]
+SS - Scalar Single-precision floating-point [value]
+
+Source: http://www.rz.uni-karlsruhe.de/rz/docs/VTune/reference/

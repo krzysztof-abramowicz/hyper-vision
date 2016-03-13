@@ -1,0 +1,267 @@
+
+ ..:: ISO/IEC 9899:2011 Standard Summary ::..
+
+1./ TRANSLATION PHASES
+
+	1 ⇣Physical stage (reading files, decoding chracters, trigraph replacement)
+	2 ⇣Line determination (physical source lines -> logical source lines)
+	3 ↓Lexical stage (comment removal, whitespace normalisation, preprocessing-token split)
+	4 ↓Preprocessing (pragma processing, macro expansion, file inclusion)
+	5 ↓String forming (escape sequence conversion)
+	6 ↓String concatenation (adjacent string literal tokens concatenation)
+	7 ↧Parsing stage (tokenization, syntactical and semantical analysis, AST)
+	8  Linking stage (external references' resolution, adding startup code, creating exacutable)
+	legend: ⇣character stream  ↓preprocessing-tokens  ↧tokens
+
+	preprocessing translation unit
+	 ↓ preprocessor
+	translation unit
+	 ↧ compiler
+	object
+
+2./ DATA TYPES
+
+C99 types
+    object types
+        scalar types
+            arithmetic types
+                integer types
+                    char
+                    signed integer types
+                        signed char, short int, int, long int, long long int
+                    unsίgned integer types
+                        _Bool, unsigned char, unsigned short int, unsigned int,
+                        unsigned long int, unsigned long long int
+                    enumeration types
+                floating types
+                    real floating types
+                        float, double, long double
+                    complex types
+                        float _Complex, double _Complex, long double _Complex
+            pointer types
+        aggregate types
+            array type
+            structure type
+        union types
+        atomic types (C11)
+    function types
+
+type groups
+    character types
+		char, signed char, unsigned char;
+    real types
+		integer types, real floating types;
+    derived declarator types
+		array type, structure type, pointer type.
+
+3./ CONCEPT TREE
+
+escape sequences
+	\a \b \f \n \r \t \v
+enumeration
+	enumeration constant
+source line (affected by '\')
+	physical
+	logical
+
+storage duration (6.2.4)
+	static
+	thread (C11)
+	automatic
+	allocated
+
+types (6.2.5)
+    object types
+        scalar types
+            arithmetic types
+                integer types
+                    char
+                    signed integer types
+                        signed char, short int, int, long int, long long int
+                    unsigned integer types
+                        _Bool, unsigned char, unsigned short int, unsigned int,
+                        unsigned long int, unsigned long long int
+                    enumeration types
+                floating types
+                    real floating types
+                        float, double, long double
+                    complex types
+                        float _Complex, double _Complex, long double _Complex
+            pointer types
+        aggregate types
+            array type
+            structure type
+        union types
+        atomic types (C11)
+    function types
+
+object representation
+	trap representation
+	compatibility
+	integer
+		width
+		precision
+		unsigned integer (width == precision)
+			value bits + padding bits (no padding for `unsigned char`)
+		signed integer (width > precision)
+			value bits + padding bits + sign bit (no padding for `signed char`)
+			sign and magnitude (negative zero!)
+			one's complement
+			two's complement
+
+alignment (C11)
+	weaker
+	stricter
+	_Alignof (type)		
+	_Alignas
+
+conversions
+	implicit (by an operation)
+		integer promotion (types < int)
+		integer conversion rank
+			transitive
+			signed == unsigned
+			long long int > long int > int > short int > signed char > _Bool
+		usual arithmetic conversion
+		lvalue conversion (object designation -> its value)
+		[6.3.2.1 3] (array of type -> pointer to type)
+		[6.3.2.1 4] (function returning type -> pointer to function returning type)
+	explicit (by a cast)	
+
+expression
+	void expression
+	lvalue expression
+	function designator
+
+OPERATORS
+	unary
+		-, &, sizeof, _Alignof (C11)
+
+modifiable lvalue
+	IS a complete type
+	IS NOT an array type
+	IS NOT a const-qualified type
+
+scope
+	types
+		file
+		block
+		function (labels)
+		function prototype (parameters)
+	relations
+		same
+		inner
+		outher
+
+storage class
+	register
+	automatic
+	static
+	external
+
+linkage (storage-class specifier)
+	none
+	internal (`static`)
+	external (`extern`)
+
+name spaces
+	1. label names
+	2. tags of `struct`, `union`, `enum`
+	3. members of them
+	4. other identifiers
+sequencing (C11)
+	sequenced (before | after | indeterminately)
+	unsequenced
+
+observable bahaviour
+
+universal character name ($UCN)
+	hex-quad: {0024, 0040, 0060} ∪ [00A0; D800) ∪ (DFFF; FFFF]
+	\u hex-quad
+	\U hex-quad hex-quad
+
+source character set ($SCS)
+	[A-Za-z0-9]
+	! " # % & ' ( ) * + , - . / :
+	; < = > ? [ \ ] ^ _ { | } ~
+	space h-tab v-tab form-feed
+
+escape sequence ($ES)
+	( \\['"?\\abfnrtv] | \\[0-7]{1,3} | \\x[0-9A-F]+ | $UCN )
+
+SYNTAX
+	token
+		keyword
+			typedef sizeof enum union struct
+			signed unsigned  short long  char int _Bool  float double _Complex void
+			auto const restrict volatile inline register static extern
+			if else  for do while continue break goto  switch case default  return
+			_Alignas _Alignof _Atomic _Generic _Imaginary _Noreturn _Static_assert _Thread_local (C11)
+		identifier
+			[_a-zA-Z][_a-zA-Z0-9]*
+			internal name
+			external name
+			predefined (__func__)
+		constant
+			integer-constant
+				decimal-constant
+					[1-9][0-9]*
+					!always signed when no suffix used
+				octal-constant 0[0-7]*
+				hexadecimal-constant 0[xX][0-9A-F]*
+				integer-suffix (L|UL|LL|ULL)
+			floating-contant
+				significand part
+				exponent part
+				decimal-floating-constant
+					([0-9]*\.[0-9]+|[0-9]+\.)([eE][+-]?[0-9]+)?
+					[0-9]+[eE][+-]?[0-9]+
+				hexadecimal-floating-constant
+					0[xX]([0-9A-F]*\.[0-9A-F]+|[0-9A-F]+\.)([pP][+-]?[01]+)?
+					0[xX][0-9A-F]+[pP][+-]?[01]+
+				floating-suffix [flFL]
+				!All floating constants of the same source form shall convert to
+				 the same internal format with the same value.
+			enumaration-constant
+				set of identifiers
+			character-constant
+				[LuU]?'($cchar|$ES)'
+				: character-constant-prefix {=>unsigned char, L=>wchar_t, u=>char16_t, U=>char32_t}
+				! $cchar = $SCS excluding single-quote, backslash and new-line characters
+		string-literal
+			(u8|[uUL]?)"($schar|$ES)+"
+			! $schar = $SCS excluding double-quote, backslash and new-line characters
+		punctuator
+			[ ] ( ) { } . ->
+			++ -- & * + - ~ !
+			/ % << >> < > <= >= == != ^ | && ||
+			? : ; ...
+			= *= /= %= += -= <<= >>= &= ^= |=
+			, # ##
+			operator, operand
+	preprocessing-token
+		header-name
+			#include ("[a-zA-Z.]"|<[a-zA-Z.]>)
+			!no escape sequences
+		identifier
+		pp-number
+			
+		character-constant
+		string-literal
+		punctuator
+
+EXPRESSION
+	primary expression
+
+QUIZ
+	\0 sequence describes a null character, but in what numbering system? (octal)
+	What is the default type for 0x80000000 integer-constant (unsigned int)
+	What is the default type for 65535 integer-constant (int)
+
+INTERESTING
+ - if argc > 0 and execution environment does not provide the program name, argv[0][0] == '\0'
+ - lifetimes of automatic objects declared in main() end with '}', not with exit().
+ - comments regard _logical source lines_ (new-line escapes may extend // comment)
+
+SEQUENCING
+ - The value computations of the operands of an operator are sequenced before the value computation of the result of the operator.

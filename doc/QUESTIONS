@@ -1,0 +1,48 @@
+
+1./ C Programming Language
+
+	Is it correct to use an enum type for matrix indexing?
+
+Stack Overflow
+
+According to 9899:1999
+
+6.3.2.3 Pointers
+
+1 A pointer to void may be converted to or from a pointer to any incomplete or object
+type. A pointer to any incomplete or object type may be converted to a pointer to void
+and back again; the result shall compare equal to the original pointer.
+
+So, in what way is the following code an exception of this rule??
+
+void myAppEvent(enum event_e event, void (*func)()) {
+	switch (event) {
+		case MY_RESHAPE:
+			glutReshapeFunc(func);
+			break;
+		case MY_DISPLAY:
+			glutDisplayFunc(func);
+			break;
+		case MY_KEYBOARD:
+			glutKeyboardFunc(( void (*)(unsigned char, int, int) )func);
+			break;
+		case MY_SPECIAL:
+			glutSpecialUpFunc((void (*)( int, int, int ))func);
+			break;
+		case MY_IDLE:
+			glutIdleFunc((void (*)()) func); 
+	}
+}
+
+### GLib ###
+
+Is PREFIX_TYPE_OBJECT() an equivelent of C++'s typeid(PREFIX::OBJECT) operator? 
+
+Is PREFIX_OBJECT(obj) macro an equivalent of C++'s dynamic_cast<PREFIX::OBJECT>(obj)?
+
+What is the reason of _collect_ and _lcopy_ operations?
+
+Why is the GTypeValueTable ignored in fundamental classed type example?
+
+ERR: there are GObject/GObjectClass (instead of GTypeInstance/GTypeClass) used for fundamental classed object registration.
+ERR: g_type_free_instance does not remove class instance for fundamental classes.

@@ -1,0 +1,157 @@
+/* Krzysztof Abramowicz (http://krzysztofabramowicz.com/, k.j.abramowicz@gmail.com)
+ *     project: HyperVision — Architectonic Rendering Engine
+ *               └─Development stage one (DS1)
+ *                  └─Core modules
+ *     toolset: ISO C '99 + OpenGL 3.3 + GLUT 2.6
+ *     content: HV::Output module header (text/x-h)
+ *     version: 1.0 OS
+ *
+ *	This file has to be processed by HyperVision C PreProcessor (hvCPP)
+ *  in order to produce C public header for the module (inc/output.h).
+ *
+ *  Thread safety: NO
+ */
+
+#ifndef HV_DS1_OUTPUT_H
+#define HV_DS1_OUTPUT_H
+
+#include "common.h"
+
+#pragma hv private
+
+	#include <stdarg.h>
+
+	// Number serialising buffers
+	#define HV_BUFS_NUM 8
+	#define HV_SIZE_NUM 16
+
+	// Sub-string formatting buffers
+	#define HV_BUFS_STR 4
+	#define HV_SIZE_STR 256
+
+	// Message concatenation buffer
+	#define HV_SIZE_MSG 512
+
+	// OpenGL info log buffer
+	#define HV_SIZE_LOG 1024
+
+	// Log messages' labels for available channels
+	static const char *hvLogLabel[] = {
+		"", "  ERROR: ", "  WARNING: ", "  INFO: ", "  DEBUG: "
+	};
+
+#pragma hv public
+
+	/*
+	 * All variadic functions, and functions meant to be evaluated as their arguments, DO NOT
+	 * relay on the argument evaluation order as it is an unspecified behaviour in ISO C'99.
+	 *
+	 * Additionally, programmers are allowed to specify complex call patterns by grouping
+	 * the effector (E) calls within formatting (F) calls used inside output (O) functions;
+	 * the latter two expecting a variable number of arguments (VA).
+	 * There are, however, limitations to be observed:
+	 *   • 8 is the maximal length of a VA list (O/F),
+	 *   • 8 is the limit of effector calls for a message (E),
+	 *   • 4 is the limit of formatting calls within a message (O).
+	 *
+	 * Example: O("str", E, "str", F(E, E), "str", F(E, "str", E, "str", E)) // O(6): 6xE, 2xF
+	 */
+
+	// Arguments' counter for shortcut macros
+	#define HV_COUNT(...) HV_COUNT_IMPL(__VA_ARGS__, 8,7,6,5,4,3,2,1,0)
+	#define HV_COUNT_IMPL(_1,_2,_3,_4,_5,_6,_7,_8,_N,...) _N
+
+	// Shortcut macros for output (O) functions
+	#define hvPrint(...) \
+		hvLogMessage(HV_LOG_PRINT, HV_COUNT(__VA_ARGS__), __VA_ARGS__)
+	#define hvInfo(...) \
+		hvLogMessage(HV_LOG_INFO, HV_COUNT(__VA_ARGS__), __VA_ARGS__)
+	#define hvWarning(...) \
+		hvLogMessage(HV_LOG_WARNING, HV_COUNT(__VA_ARGS__), __VA_ARGS__)
+	#define hvError(...) \
+		hvLogMessage(HV_LOG_ERROR, HV_COUNT(__VA_ARGS__), __VA_ARGS__)
+	#define hvDebug(...) \
+		hvLogMessage(HV_LOG_DEBUG, HV_COUNT(__VA_ARGS__), __VA_ARGS__)
+
+	// Shortcut macros for formating (F) functions
+	#define hvRed(...) \
+		hvLogColour(HV_LOG_RED, HV_COUNT(__VA_ARGS__), __VA_ARGS__)
+	#define hvGreen(...) \
+		hvLogColour(HV_LOG_GREEN, HV_COUNT(__VA_ARGS__), __VA_ARGS__)
+	#define hvBlue(...) \
+		hvLogColour(HV_LOG_BLUE, HV_COUNT(__VA_ARGS__), __VA_ARGS__)
+	#define hvYellow(...) \
+		hvLogColour(HV_LOG_YELLOW, HV_COUNT(__VA_ARGS__), __VA_ARGS__)
+	#define hvGray(...) \
+		hvLogColour(HV_LOG_GRAY, HV_COUNT(__VA_ARGS__), __VA_ARGS__)
+
+	// Shortcut macro for dynamic assertion with conditional exit
+	#define hvErrorCheck(COND,...) \
+		hvLogErrorCheck(COND, HV_COUNT(__VA_ARGS__), __VA_ARGS__)
+
+// Messages' log channels (HV_LOG_PRINT: bypass classification)
+enum log_e {
+	HV_LOG_PRINT,
+	HV_LOG_ERROR,
+	HV_LOG_WARNING,
+	HV_LOG_INFO,
+	HV_LOG_DEBUG
+};
+
+// Sub-messages' colours (HV_LOG_PLAIN: restore TTY's defaults)
+enum col_e {
+	HV_LOG_PLAIN,
+	HV_LOG_RED,
+	HV_LOG_GREEN,
+	HV_LOG_BLUE,
+	HV_LOG_YELLOW,
+	HV_LOG_GRAY
+};
+
+// Effectors (E) -- atomic serialisers for O/F functions
+#define hvStr(x) (const char*) x
+const char* hvInt(int number);
+const char* hvHex(int number);
+const char* hvBin(int number);
+const char* hvNum(size_t number);
+const char* hvFlt(float number);
+#ifdef HV_DS1_OPENGL_H
+const char* hvIntGL(GLint value);
+const char* hvTypeGL(GLint type);
+const char* hvTypeGLSL(GLint type);
+#endif
+
+// Log (re)initialisation, configuration and termination
+void hvLogInit(enum log_e level, FILE* target);
+void hvLogTabWidth(unsigned char width);
+void hvLogTerm();
+
+// Debugging functions
+void hvLogLimits();
+void hvLogFloats();
+
+// Message output (O) and formatting (F) functions
+void hvLogMessage(enum log_e level, const unsigned char argc, ...);
+const char * hvLogString(const unsigned char argc, ...);
+const char * hvLogColour(enum col_e colour, const unsigned char argc, ...);
+
+// Error handling functions
+void hvLogErrorCheck(bool condition, const unsigned char argc, ...);
+#ifdef HV_DS1_OPENGL_H
+void hvErrorCheckGL(const char* error_message);
+void hvErrorCheckGLSL(GLuint name);
+#endif
+
+// Buffered multi-column output functions
+void hvFrameInit(unsigned char width, unsigned char height);
+void hvFrameColumnSeparator(const char separator);
+void hvFrameColumnPadding(unsigned char width);
+void hvFramePrint();
+void hvFrameDebug();
+void hvFrameRowPuts(const char* str);
+void hvFrameRowSkip(unsigned char count);
+void hvFrameColumnNext();
+void hvFrameTerm();
+
+#endif /* defined HV_DS1_OUTPUT_H */
+

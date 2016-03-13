@@ -1,0 +1,82 @@
+
+
+Primitive modes (GLenum pri_mode):
+	GL_POINTS | GL_LINES | GL_LINE_STRIP | GL_LINE_LOOP | GL_TRIANGLES | GL_TRIANGLE_STRIP | GL_TRIANGLE_FAN
+
+Rasterization modes (GLenum ras_mode):
+	GL_POINT | GL_LINE | GL_FILL
+
+OpenGL functions:
+	glPolygonMode(GL_FRONT_AND_BACK, ras_mode);
+	VAO: glEnableVertexAttribArray(GLuint index);
+	VAO: VBO: 
+
+Vertex transformation pipeline:
+	Local/Object Space
+		modeling transformation
+		*modelMatrix (create with hvMatrix[Translate|Rotate*|Scale])
+	World Space
+		view transformation
+		*viewMatrix (create with hvMatrixView*)
+	Eye Space
+		projection transformation
+		*projectionMatrix (create with hvMatrixProj*)
+	Clip/Homogeneous Space
+		perspective division
+	Normalised Device Space
+		[rasterisation]
+	Vieport/Window Space
+
+concepts
+	coordinate space
+		local coordinate space
+			local origin
+			model matrix
+		world coordinate space
+			world origin
+			view matrix
+		eye coordinate space
+		
+	transformation pipeline
+		
+	vertex
+		buffer
+		attribute
+		coordinate space / origin (local|world)
+	matrix
+		special constants and cases
+			zero matrix (0)
+			identity matrix (diag(1))
+			square matrix (n=m)
+		transformations
+			affine
+				translation
+				rotation
+				scaling
+				shearing
+				reflection
+			projective
+		operations
+			transposing
+			addition
+			multiplication
+		attributes
+			diaginal (main)
+		row-major (C-direct, combine: left-to-right)
+		columnt-major (C-transposed, combine: right-to-left)
+		
+	Graphics Processing Unit (GPU)
+		shader processing slot
+	entities
+		pixel (picture element)
+		vertex
+		fragment
+	state
+		using (shader programmes)
+		binding (buffer objects)
+		enabling (rendering modes)
+	graphics pipeline
+		fixed-function
+		programmable
+	clip space
+	back-face culling

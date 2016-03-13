@@ -1,0 +1,102 @@
+/* Krzysztof Abramowicz (http://krzysztofabramowicz.com/, k.j.abramowicz@gmail.com)
+ *   project: HyperVision — Architectonic Rendering Engine
+ *             └─Development stage one (DS1)
+ *                └─Core modules
+ *   toolset: ISO C '99 + OpenGL 3.3 + GLUT 2.6
+ *   content: HV::Model module header template (text/x-h.hvcpp)
+ *   version: 1.2 OS
+ *
+ *	This file has to be processed by HyperVision C PreProcessor (hvCPP)
+ *  in order to produce C public header for the module (inc/matrix.h).
+ *
+ *  Triangle winding: counter-clockwise
+ *  Vertex attributes: Position3f + Normal3f
+ */
+
+#ifndef HV_DS1_MODEL_H
+#define HV_DS1_MODEL_H
+
+#include "common.h"
+#include "opengl.h"
+#include "output.h"
+#include "matrix.h"
+#include "shader.h"
+
+#pragma hv private
+
+	#pragma hv vpath("./src/models")
+	#pragma hv merge("cube.obj")
+	#pragma hv merge("H.obj")
+	#pragma hv merge("V.obj")
+	#pragma hv table(model.ptr)
+
+#pragma hv public
+
+	#define HV_VERTEX_ARRAY 0
+	#define HV_BUFFERS 1
+	#define HV_VERTEX_BUFFER 1
+	#define HV_INDEX_BUFFER 2
+
+	#define HV_SHADER_PROGRAM 0
+	#define HV_VERT_SHADER 1
+	#define HV_FRAG_SHADER 2
+
+	#define HV_UV 2
+	#define HV_XYZ 3
+	#define HV_XYZW 4
+	#define HV_RGBA 4
+	
+	#define rgb(x,y,z) (col3_t){{x, y, z}}
+
+	#pragma hv table(model.enum)
+
+// Colour type (components: red, green, blue, alpha)
+typedef struct Colour {
+	float v[3];
+} col3_t;
+
+enum col3_e {
+	R, G, B, A
+};
+
+// Vertex type (attributes: position, normal)
+typedef struct {
+	float pos[3];
+	float nor[3];
+} vtx3_t;
+
+// Mesh type (contains: name, vertices, indices)
+typedef struct {
+	char name[12+1];
+	vtx3_t *vertices;
+	GLushort *indices;
+	size_t vsize, isize;
+} mesh_t;
+
+// Model type (holds: mesh, matrix, color, VAO, VBO, IBO)
+typedef struct {
+	GLuint buffer[3];
+	mat4_t matrix;
+	col3_t color;
+	mesh_t* mesh;
+} model_t;
+
+// Model: initialisation and termination
+model_t hvCreateStockModel(enum smodel_e stockModelEnum);
+model_t hvCreateModel(const char* name, vtx3_t *vertices, size_t ver_size, GLushort *indices, size_t ind_size);
+void hvDeleteModel(model_t *model);
+
+// Model: accessors
+void hvModelColor(model_t* model, col3_t color);
+const char * hvModelName(model_t* model);
+size_t hvModelFaces(model_t *model);
+
+// Model: drawing and transformations
+void hvModelDraw(model_t* model, prog_t* prog, mat4_t* viewMatrix);
+void hvModelSync(model_t* model);
+void hvModelDump(model_t* model);
+void hvModelFaceFlip(model_t *model);
+void hvModelFaceRoll(model_t *model);
+
+#endif /* defined HV_DS1_MODEL_H */
+

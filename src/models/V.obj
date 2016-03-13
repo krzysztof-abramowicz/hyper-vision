@@ -1,0 +1,119 @@
+# Krzysztof Abramowicz (http://krzysztofabramowicz.com/, k.j.abramowicz@gmail.com)
+#     project: HyperVision — Architectonic Rendering Engine
+#               └─Development stage one (DS1)
+#                  └─Embedded resources
+#     content: Letter "V" model (application/x-tgif [subset])
+#     version: 1.0 OS
+
+o letter_V
+
+g front
+v -0.3   0.5   0.1
+v -0.1   0.5   0.1
+v  0.1   0.5   0.1
+v  0.3   0.5   0.1
+v -0.05  0.15  0.1
+v  0.05  0.15  0.1
+v -0.2   0.0   0.1
+v  0.2   0.0   0.1
+v  0.0  -0.2   0.1
+v -0.1  -0.5   0.1
+v  0.1  -0.5   0.1
+
+vn  0.0  0.0  1.0
+vn  0.0  1.0  0.0
+vn  0.0  1.0  0.0
+vn  0.0  0.0  1.0
+vn  0.0  0.0  1.0
+vn  0.0  0.0  1.0
+vn -1.0  0.0  0.0
+vn  1.0  0.0  0.0
+vn -1.0  0.0  0.0
+vn  0.0  0.0  1.0
+vn  0.0  0.0  1.0
+
+g front
+v -0.3   0.5  -0.1
+v -0.1   0.5  -0.1
+v  0.1   0.5  -0.1
+v  0.3   0.5  -0.1
+v -0.05  0.15 -0.1
+v  0.05  0.15 -0.1
+v -0.2   0.0  -0.1
+v  0.2   0.0  -0.1
+v  0.0  -0.2  -0.1
+v -0.1  -0.5  -0.1
+v  0.1  -0.5  -0.1
+
+vn -1.0  0.0  0.0
+vn  0.0  0.0 -1.0
+vn  0.0  0.0 -1.0
+vn  1.0  0.0  0.0
+vn  1.0  0.0  0.0
+vn -1.0  0.0  0.0
+vn  0.0  0.0 -1.0
+vn  0.0  0.0 -1.0
+vn  0.0  0.0 -1.0
+vn  0.0 -1.0  0.0
+vn  0.0 -1.0  0.0
+
+
+# Front face of "V" (9 triangles)
+# ⊙ 0, 3, 4, 5, 9, 10 
+f 0  4  1
+f 0  6  4
+f 3  2  5
+f 3  5  7
+f 4  6  8
+f 9  8  6
+f 5  8  7
+f 10 7  8
+f 9  10 8
+
+# Back face of "V" (9 triangles)
+# ⊗ 12, 13, 17, 18, 19
+f 12 15 11
+f 13 14 16
+f 17 11 15
+f 18 16 14
+f 17 15 19
+f 19 16 18
+f 17 19 20
+f 19 18 21
+f 19 21 20
+
+# Side faces od "V" (20 triangles)
+# ↑ 1, 2;   ↗ 15;    ↖ 16
+# ↓ 20, 21; ↘ 7, 14; ↙ 6, 11
+
+f  1 11  0
+f  1 12 11
+
+f 15 12 1
+f 15  1 4
+
+f 15 4  8
+f 15 8 19
+
+f 16 19 8
+f 16  8 5
+
+f 16 5  2
+f 16 2 13
+
+f  2 14 13
+f  2  3 14
+
+f  7 14  3
+f  7 18 14
+f  7 21 18
+f  7 10 21
+
+f 21 10 9
+f 21  9 20
+
+f  6 20  9
+f  6 17 20
+f  6 11 17
+f  6  0 11 
+

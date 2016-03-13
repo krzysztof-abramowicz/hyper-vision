@@ -1,0 +1,47 @@
+
+WHITE PAPERS
+
+	International Organization for Standardization
+	ISO/IEC 9899:2011 Programming languages — C
+	Committee Draft — April 12, 2011
+
+	R.M.Stallman, R.McGrath, P.D.Smith (Free Software Foundation)
+	GNU Make -- A Program for Directing Recompilation
+	(GNU make v.3.82, July 2010)
+
+	P.Karlton, P.Womack, J.Leech (Silicon Graphics, Inc.)
+	OpenGL Graphics with the X Window System (version 1.4)
+
+	J.Leech and The Khronos Group (Khronos Group Inc.)
+	Khronos Native Platform Graphics Interface
+	(EGL Version 1.4 - February 11, 2013)
+
+	Advanced Micro Devices Corp.
+	AMD64 Architecture Programmer’s Manual
+	Volume 4: 128-Bit and 256-Bit Media Instructions
+
+WEB PAGES / MANUALS
+	GObject Reference Manual for GObject 2.40.0
+	[https://developer.gnome.org/gobject/stable/index.html](access June 2014)
+
+	E.Luten (software engineer)
+	OpenGL Book
+	[OpenGLBook.com]
+
+	A.Gerdelan (Massey University, New Zealand)
+	Anton's OpenGL 4 Tutorials
+	[http://antongerdelan.net/opengl/]
+
+	A.Fog (Copenhagen University College of Engineering)
+	Optimizing subroutines in assembly language
+	
+WIKIPEDIA
+
+	Mathematics
+		Vector Space, Vector, Matrix
+	Programming
+		X86-64, SSE
+	Computer graphics
+		Shading
+	Graphical User Interfaces
+		GLib, GObject

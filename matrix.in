@@ -1,0 +1,165 @@
+/* Krzysztof Abramowicz (http://krzysztofabramowicz.com/, k.j.abramowicz@gmail.com)
+ *   project: HyperVision — Architectonic Rendering Engine
+ *             └─Development stage one (DS1)
+ *                └─Core modules
+ *   toolset: ISO C '99 + OpenGL 3.3 + GLUT 2.6
+ *   content: HV::Matrix module header template (text/x-h.hvcpp)
+ *   version: 1.2 OS
+ *
+ *	This file has to be processed by HyperVision C PreProcessor (hvCPP)
+ *  in order to produce C public header for the module (inc/matrix.h).
+ *
+ *  Matrix layout: column-major
+ *  Coordinate system: right-handed
+ */
+
+#ifndef HV_DS1_MATRIX_H
+#define HV_DS1_MATRIX_H
+
+#include "common.h"
+#include <tgmath.h>
+
+#pragma STDC FP_CONTRACT on
+#pragma STDC FENV_ACCESS off
+
+#pragma hv private
+
+#define HV_SIZE_VEC 36
+
+#if HV_FUNCTION_MODE == HV_LTAB
+
+	#define hvAngle(x) (unsigned int) (x)
+	#define hvSin(x) sin_ltab[x]
+	#define hvCos(x) cos_ltab[x]
+	#define hvCtg(x) ctg_ltab[x]
+	
+	#pragma hv table(sin(0:360), float, 'sin_ltab')
+	#pragma hv table(cos(0:360), float, 'cos_ltab')
+	#pragma hv table(ctg(0:360), float, 'ctg_ltab')
+
+	#pragma message("Enabled optimisation: lookup tables")
+	
+#elif HV_FUNCTION_MODE == HV_CLIB
+	
+	#define HV_PI 3.14159265
+	#define hvAngle(x) ((x) * (HV_PI / 180.0f))
+	#define hvSin(x) sin(x)
+	#define hvCos(x) cos(x)
+	#define hvCtg(x) (1.0f / tan(x))
+	
+#else
+
+	#error Unknown math mode specified (check configuation in common.h)
+	
+#endif /* HV_FUNCTION_MODE */
+
+#pragma hv public
+
+#if HV_OPERATION_MODE == HV_SCALAR
+
+	#define vec(x,y,z) (vec3_t){{x, y, z}}
+	#define VEC(x,y,z) {{x, y, z}}
+
+	typedef struct {
+		float v[3];
+	} vec3_t;
+
+	typedef struct {
+		float m[16];
+	} mat4_t;
+
+#elif HV_OPERATION_MODE == HV_VECTOR
+
+	#include <xmmintrin.h>
+
+	#define vec(x,y,z) (__m128){x, y, z, 0.0f}
+	#define VEC(x,y,z) {x, y, z, 0.0f}
+
+	typedef __m128 vec3_t;
+
+	typedef struct {
+		float m[16];
+	} mat4_t __attribute__((aligned(16)));
+
+	#pragma message("Enabled optimisation: vectorised linear algebra operations")
+	
+#else
+
+	#error Unknown matrix mode specified (check configuration in common.h)
+	
+#endif /* HV_OPERATION_MODE */
+
+/* Enumerations and constants for vector and matrix types */
+enum vec_e {
+	X, Y, Z, W
+};
+
+enum mat4_e {
+	Xx, Xy, Xz, Xw,
+	Yx, Yy, Yz, Yw,
+	Zx, Zy, Zz, Zw,
+	Tx, Ty, Tz, Tw
+};
+
+enum mat4_a {
+	Sx = Xx,
+		Sy = Yy,
+			Sz = Zz
+};
+
+static const mat4_t HV_IDENTITY_MATRIX = {
+   {  1.0f, 0.0f, 0.0f, 0.0f,
+	  0.0f, 1.0f, 0.0f, 0.0f,
+	  0.0f, 0.0f, 1.0f, 0.0f,
+	  0.0f, 0.0f, 0.0f, 1.0f  }
+};
+
+/* General vector arithmetic */
+_Bool  hvVectorEqual(vec3_t a, vec3_t b);
+vec3_t hvVectorNeg(vec3_t a);
+vec3_t hvVectorAdd(vec3_t a, vec3_t b);
+vec3_t hvVectorSub(vec3_t a, vec3_t b);
+float  hvVectorDot(vec3_t a, vec3_t b);
+float  hvVectorLen(vec3_t vec);
+vec3_t hvVectorNorm(vec3_t vec);
+vec3_t hvVectorCross(vec3_t a, vec3_t b);
+float  hvVectorAngle(vec3_t a, vec3_t b);
+
+/* General matrix arithmetic */
+void  hvMatrixZero(mat4_t *mat);
+void  hvMatrixIdentity(mat4_t *mat);
+void  hvMatrixTranspose(mat4_t *mat);
+_Bool hvMatrixAreEqual(const mat4_t *mat_a, const mat4_t *mat_b);
+void  hvMatrixMultiply(const mat4_t *mat_a, const mat4_t *mat_b, mat4_t *mat_r);
+
+/* Affine matrix transformations CS: RH->RH */
+void hvMatrixResize(mat4_t *mat, float factor);
+void hvMatrixScale(mat4_t *mat, float x_fac, float y_fac, float z_fac);
+void hvMatrixRotateX(mat4_t *mat, float angle);
+void hvMatrixRotateY(mat4_t *mat, float angle);
+void hvMatrixRotateZ(mat4_t *mat, float angle);
+void hvMatrixTranslate(mat4_t *mat, vec3_t dir);
+
+/* Eye Space matrix transfpormations CS: RH->RH */
+void hvMatrixViewCamera(mat4_t *view, vec3_t eye, vec3_t ref, vec3_t up);
+
+/* Projective matrix transformations CS: RH->LH ! */
+void hvMatrixProjectionCubic(mat4_t *mat, float edge);
+void hvMatrixProjectionPlain(mat4_t *mat, float left, float right, float bottom, float top);
+void hvMatrixProjectionOrthographic(mat4_t *mat, float left, float right, float bottom, float top, float near, float far);
+void hvMatrixProjectionFrustum(mat4_t *mat, float left, float right, float bottom, float top, float near, float far);
+void hvMatrixProjectionPerspective(mat4_t *mat, float yFOV, float ratio, float near, float far);
+
+/* Matrix-related print functions */
+void hvMatrixPrintI(const mat4_t *mat);
+void hvMatrixPrintF(const mat4_t *mat);
+#ifdef HV_DS1_OUTPUT_H
+	const char* hvVec(vec3_t vec);
+	const char* hvVec3(vec3_t vec);
+	void hvMatrixPrintFC(const mat4_t *mat);
+	void hvMatrixPrintToFrameI(const mat4_t *mat);
+	void hvMatrixPrintToFrameF(const mat4_t *mat);
+#endif
+
+#endif /* defined HV_DS1_MATRIX_H */
+

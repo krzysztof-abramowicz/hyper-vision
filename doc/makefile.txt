@@ -1,0 +1,226 @@
+command line options:
+	-C	--directory=			Change to directory dir before reading the makefiles (used with recursive invocations of make).
+	-d --debug=a				Print debugging information (a=all, more logging types/levels exist).
+	-e --environment-overrides	Give variables taken from the environment precedence over variables from makefiles.
+	-f --file					Specifies the name of the makefile (can be used multiple times).
+	-i --ignore-errors			disables erroch checking for all _recipes_.
+	-I --include-dir=			Specifies a directory dir to search for included makefiles.
+	-j --jobs					number of _job slots_ for parallel execution
+	-k --keep-going				build as many targets as possible (don't stop on first error)
+	-n --just-print				"No-op": Prints recipes instead of executing them (including @-lines)
+	-o							"Old": Avoid recompilation of file specified with this option.
+	-q --question				Silently check whether the targets are up to date already (respond via _exit status).
+	-r --no-builtin-rules		Eliminate use of the built-in implicit rules.
+	-R --no-builtin-variables	Cancel all variables used by implicit rules.
+	-s --silent					makes all recipes silent (same as @ preceding all recipe lines)
+	-t --touch					marks targets as up to date without actually running any recipes
+	-w --print-directory		shows each directory as make starts/finishes processing it
+	-W --what-if=				The given files’ modification times are recorded by make as being the present time.
+	-v -h						Obvious :-)
+
+	var=val						Sets _var to _val permanenly, overriding any ordinary assignments within the makefile.
+	var:=val					Used assignment operator determines the flavour of the variable.
+
+
+The ‘-n’, ‘-t’, and ‘-q’ options do not affect recipe lines that begin with ‘+’ characters or contain the string ‘$(MAKE)’.
+It is an error to use more than one of these three flags in the same invocation of make.
+
+automatic variables:
+	$@						target
+	$%						archive member target
+	$<						first prerequisite
+	$^						all prerequisites of the rule
+	$?						all prerequisites newer than the target
+	$|						all order-only prerequisites of the rule
+	$*						The stem with which an implicit rule matches
+
+
+functions:
+# Variable-related functions
+	$(value var)			Return the variable's value without having it expanded.
+	$(flavor var)			Returns a string describing the _var's flavour (see the flavour concept)
+	$(origin var)			Returns a string (or pair) describing the _var's origin (see the origin concept)
+# Reporting functions
+	$(info txt)				Prints its expanded argument to standard output; returns empty string.
+	$(warning txt)			Raises a warning message containing _txt and context; returns empty string.
+	$(error txt)			Generates an error described with _txt and context; stops make.
+# Textual functions
+	$(subst t1,t2,txt)		Performs a textual replacement (t1->t2) on the _txt.
+	$(strip txt)			Strips leading and trailing whitespace and reduces iternal spacing in _txt.
+	$(findstring t1,txt)	Returns _t1 when found in _txt; gives empty string otherwise.
+# Word set functions
+	$(patsubst pat,txt,set)	Finds words in _set that match _pat replaces them with _txt.
+	$(filter pats,set)		Leaves only these words from _set, which are matched by any of _pats.
+	$(filter-out pats,set)	Removes any word from _set, which is matched by any of _pats.
+	$(sort set)				Sorts the _set in lexical order; removes duplicate words.
+	$(word idx,set)			Returns _idxth word from _set (counted from 1).
+	$(wordlist i1,i2,set)	Returns a subset of words from _set, laying between _i1 and _i2 inclusive.
+	$(words set)			Returns the number of words in _set.
+	$(firstword set)		Returns the first word in _set, as $(word 1,set) does.
+	$(lastword set)			Returns the last word in _set, like $(word $(words set),set).
+# file lists functions
+	$(dir setf)				Extracts the directory-part of each file name in _setf.
+	$(notdir setf)			Extracts all but the directory-part of each file name in _setf.
+	$(suffix setf)			Extracts (last) extension of each file name in _setf.
+	$(basename setf)		Extract all but the (last) extension of each file name in _setf.
+	$(addsuffix txt,setf)	Appends _txt to each file name in _setf.
+	$(addprefix txt,setf)	Prepends _txt to each file name in _setf.
+	$(join set1,set2)		Concatenates _set1 and _set2 word by word.
+# File system dependant functions
+	$(wildcard syspat)		Builds a list of file names matching the shell-style wildcard _syspat.
+	$(realpath setf)		Converts each file name to canonical absolute path.
+	$(abspath setf)			Converts each file name to absolute path.
+# Conditional functions
+	$(if cond,then[,else])  Returns _then if _cond expands to a non-empty string; _else or empty otherwise.
+	$(or cond1[,cond2[,*]])	Returns the first _cond? with a non-empty expansion.
+	$(and cond1[,cond2[,*]])Returns the last _cond? if all have a non-empty expansion; empty otherwise.
+# Very special functions
+	$(foreach var,set,txt)	Expands _txt $(words _set) times with _var set to $(word [time],_set) each time.
+							Presumably _txt contains references to _var, so its expansion will vary each time.
+							Result: whitespace-separated list of expansions of _txt.
+	$(call var,par1,par2,*)	Expands _var with special variables $(0),$(1),* set to _par1,_par2,*
+							Presumably _var contains references to these, so its expansion depends on the parameters.
+							Result: expansion of _var for the given list of parameters.
+	$(eval var)				Expands _var and passes the resulting text to make interpreter for evaluation.
+							After expansion, _var should yield a valid make code, expanded once again whan evaluated.
+							Result: make code takes effect immediately; function returns ampty string.
+	$(shell cmd)			Performs a _command expansion_ on the argument. _cmd is expanded and passed to the system
+							shell for evaluation. The output is then merged to a space-separated list of lines.
+	legend:
+		txt		a text, reference, function or any combination of them
+		var		a variable (given by its name or txt yielding it)
+		set(f)	a variable containing a list of space-separated words (filenames)
+		pat(s)	a %-based pattern (or a set of them)
+		idx		a positive, integer index (or a txt yielding it)
+		t?,i?	other, incrementally-counted arguents of type txt and idx, respectively.
+		Actually, all these types are txt, but meet different semantical requirements.
+		
+
+operators:
+	=       recursive assignment (recursively-expanded variable)
+	:=      static assignment (simply-expanded variable)
+	+=      appending assignment (result depends on LHS variable's flavour)
+	?=      conditional assignment
+
+directives:
+	define _variable_ [:|+=] .. endef    define a multi-line, recursively-expanded variable (eg. for _canned recipes_)
+	vpath [pattern [directories]]
+	include path
+	export _variable_
+	unexport _variable_
+	override
+		_var_ [:|:=]
+		define _var_ [:|+=]
+		undefine _var_
+	private
+	ifeq (a,b) ..
+	ifneq (a,b) ..
+	ifdef _var-name_ ..
+	ifndef _var-name_ ..
+	.. else ..
+	.. endif
+
+special variables:
+	MAKE          (default: /bin/make)
+	MAKELEVEL     (default: 0)
+	MAKEFLAGS
+	MAKEFILES
+	MAKECMDGOALS  (default: )
+	MAKEOVERRIDES
+	MAKE_VEESION  (dafault: [version])
+	OUTPUT_OPTION (default: -o $@)
+	SHELL         (default: /bin/sh)
+	SUFFIXES
+	VPATH
+	.SHELLFLAGS   (default: -c)
+	.DEFAULT_GOAL (default: first explicit rule)
+	.LIBPATTERNS  (default: "lib%.so lib%.a")
+	.RECIPEPREFIX (default: [tab])
+
+Special variables for implicit rules:
+	name	flags		tool
+	AR		ARFLAGS		Archive manager
+	AS		ASFLAGS		Assembler
+	CC		CFLAGS		C compiler
+	CXX		CXXFLAGS	C++ compiler
+	CPP		CPPFLAGS	C Preproseccor
+	LD		LDFLAGS		Linker
+	
+special targets:
+	.PHONY:
+	.ONESHELL:
+	.DEAFULT:
+	.INTERMEDIATE:
+	.SECONDARY:
+	.PRECIOUS:
+	.NOTPARALLEL:
+	.DELETE_ON_ERROR:
+	.SECONDEXPANSION:
+	.EXPORT_ALL_VARIABLES:
+
+obsolete:
+	.SILENT: ('@' is more flexible, -s makes them all silent)
+	.IGNORE: ('-' is more flexible, -i toggles global ignore)
+	.SUFFIXES: (use pattern rules instead)
+
+concepts:
+syntactic unit
+	file
+		archive
+			member
+	rule
+		target
+			(default) goal
+		prerequisite
+		recipe
+		implicit rule
+			chain
+		explicit rule
+		pattern rule
+			prefix,stem,suffix
+			match-anything
+			last-resort
+		suffix rule (obsolete)
+		terminal | nonterminal
+	directive
+		conditional directive (ifeq, else, endif)
+	variable
+		value
+		inheritance (global scope <- target <- prerequisite)
+		target-specific value (eg. degug: CFLAGS = -g )
+		pattern-specific value (eg. %.o: CFLAGS = -O2 )
+		automatic variable  ( $@ )
+		substitution reference  ( $(var:x=y) )
+		nested variable reference  ( $($(x)) )
+		flavor
+			undefined (flavour concerns existing variables)
+			static (simply-expanded variable)
+			recursive (recursively-expanded variable)
+		origin
+			undefined (origin concerns existing variables)
+			default (eg. CC, CFLAGS)
+			automatic (eg. $@, $<)
+			environment [override]
+			file
+			command line
+			override
+
+prefered utilities:
+	awk cat cmp cp diff echo egrep expr false grep install-info ln ls
+	mkdir mv printf pwd rm rmdir sed sleep sort tar test touch tr true
+
+examples:
+	override CFLAGS += $(patsubst %,-I%,$(subst :, ,$(VPATH)))
+
+	archive.a: ...
+	ifneq (,$(findstring t,$(MAKEFLAGS)))
+		+touch archive.a
+		+ranlib -t archive.a
+	else
+		ranlib archive.a
+	endif
+
+	dirs := $(dir paths)
+	files := $(notdir paths)
+	paths := $(join dirs,files)
+
